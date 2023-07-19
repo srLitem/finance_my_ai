@@ -2,16 +2,16 @@ from django.db import models
 import datetime
 
 
-class Category(models.Model):
+class Account(models.Model):
     name = models.CharField(max_length=100)
+    balance = models.FloatField()
 
     def __str__(self):
         return self.name
 
 
-class Account(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=100)
-    balance = models.FloatField()
 
     def __str__(self):
         return self.name
