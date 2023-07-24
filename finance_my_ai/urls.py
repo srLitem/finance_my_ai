@@ -16,7 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from finance_app.views import (
+    AccountListView, AccountDetailView,
+    CategoryListView, CategoryDetailView,
+    TransactionListView, TransactionDetailView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', AccountListView.as_view(), name='account-list'),
+    path('accounts/<int:pk>/', AccountDetailView.as_view(), name='account-detail'),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
+    path('transactions/', TransactionListView.as_view(), name='transaction-list'),
+    path('transactions/<int:pk>/', TransactionDetailView.as_view(), name='transaction-detail'),
 ]
