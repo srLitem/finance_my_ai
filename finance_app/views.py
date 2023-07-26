@@ -22,11 +22,13 @@ class AccountListView(APIView):
 
 class AccountDetailView(APIView):
 
-    def get(self, request, pk):
+    @staticmethod
+    def get(request, pk):
         account = get_object_or_404(Account, pk=pk)
         serializer = AccountSerializer(account)
         return Response(serializer.data)
 
+    @staticmethod
     def put(self, request, pk):
         account = get_object_or_404(Account, pk=pk)
         serializer = AccountSerializer(account, data=request.data)
@@ -35,6 +37,7 @@ class AccountDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @staticmethod
     def delete(self, request, pk):
         account = get_object_or_404(Account, pk=pk)
         account.delete()
@@ -84,7 +87,14 @@ class TransactionListView(APIView):
     def post(self, request):
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            account_id = request.data.get('account_id')
+            category_id = request.data.get('category_id')
+
+            account = Account.objects.get(pk=account_id)
+            category = Category.objects.get(pk=category_id)
+
+            serializer.save(account=account, category=category)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

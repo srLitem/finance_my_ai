@@ -5,16 +5,16 @@ from finance_app.models import Account, Category, Transaction
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['name', 'balance']
+        fields = ['id', 'name', 'balance']
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['amount', 'date', 'description']
+        fields = ['id', 'amount', 'date', 'description']
