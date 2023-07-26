@@ -15,7 +15,7 @@ class AccountListView(APIView):
         transactions_min_amount = request.GET.get('transactions_min_amount')
 
         if transactions_min_amount is not None:
-            accounts = Account.objects.filter(accounts_key__amount__gt=float(transactions_min_amount)).distinct()
+            accounts = Account.objects.filter(accounts__amount__gt=float(transactions_min_amount)).distinct()
         else:
             accounts = Account.objects.all()
 
