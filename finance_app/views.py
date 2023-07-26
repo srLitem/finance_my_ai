@@ -4,6 +4,7 @@ from finance_app.serializers import AccountSerializer, CategorySerializer, Trans
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.db.models import Q
 
 
 class AccountListView(APIView):
@@ -80,8 +81,25 @@ class CategoryDetailView(APIView):
 
 class TransactionListView(APIView):
     def get(self, request):
+
+        amount_min = request.GET.get('amount_min')
+        amount_max = request.GET.get('amount_max')
+        date_min = request.GET.get('date_min')
+        date_max = request.GET.get('date_max')
+
         transactions = Transaction.objects.all()
+
+        if amount_min is not None:
+            transactions = transactions.filter(amount__gte=float(amount_min))
+        if amount_max is not None:
+            transactions = transactions.filter(amount__lte=float(amount_max))
+        if date_min is not None:
+            transactions = transactions.filter(date__gte=date_min)
+        if date_max is not None:
+            transactions = transactions.filter(date__lte=date_max)
+
         serializer = TransactionSerializer(transactions, many=True)
+
         return Response(serializer.data)
 
     def post(self, request):
