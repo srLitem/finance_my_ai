@@ -19,9 +19,8 @@ class Category(models.Model):
 
 class Transaction(models.Model):
     # Foreign keys
-    # Using models.CASCADE so when the reference object is deleted, the objects with a FK to it are deleted as well
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    account = models.ForeignKey(Account, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories_key')
+    account = models.ForeignKey(Account, on_delete=models.PROTECT, related_name='accounts_key')
     # Fields
     amount = models.FloatField()
     date = models.DateTimeField("date added")

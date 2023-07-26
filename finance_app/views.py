@@ -5,13 +5,23 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.db.models import Q
+from django.db.models import Sum
 
+
+from django.db.models import Exists, OuterRef
 
 class AccountListView(APIView):
     def get(self, request):
-        accounts = Account.objects.all()
+        transactions_min_amount = request.GET.get('transactions_min_amount')
+
+        if transactions_min_amount is not None:
+            accounts = Account.objects.filter(accounts_key__amount__gt=float(transactions_min_amount)).distinct()
+        else:
+            accounts = Account.objects.all()
+
         serializer = AccountSerializer(accounts, many=True)
         return Response(serializer.data)
+
 
     def post(self, request):
         serializer = AccountSerializer(data=request.data)
