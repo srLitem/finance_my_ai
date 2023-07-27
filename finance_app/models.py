@@ -19,8 +19,8 @@ class Category(models.Model):
 
 class Transaction(models.Model):
     # Foreign keys
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
-    account = models.ForeignKey(Account, on_delete=models.PROTECT, related_name='accounts')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories_key')
+    account = models.ForeignKey(Account, on_delete=models.PROTECT, related_name='accounts_key')
     # Fields
     amount = models.FloatField()
     date = models.DateTimeField("date added")
