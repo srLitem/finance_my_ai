@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from finance_app.models import Account, Category, Transaction
+from finance_app.models import Account, Category, Transaction, CustomUser
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -18,3 +18,9 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ['id', 'account', 'amount', 'date', 'description']
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'username', 'password']

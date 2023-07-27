@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
-from finance_app.models import Account, Category, Transaction
-from finance_app.serializers import AccountSerializer, CategorySerializer, TransactionSerializer
+from finance_app.models import Account, Category, Transaction, CustomUser
+from finance_app.serializers import AccountSerializer, CategorySerializer, TransactionSerializer, CustomUserSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -145,3 +145,17 @@ class TransactionDetailView(APIView):
         transaction = get_object_or_404(Transaction, pk=pk)
         transaction.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CustomUserListView(APIView):
+    def get(self, request):
+        users = CustomUser.objects.all()
+        serializer = CustomUserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CustomUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -20,6 +20,7 @@ from finance_app.views import (
     AccountListView, AccountDetailView,
     CategoryListView, CategoryDetailView,
     TransactionListView, TransactionDetailView,
+    CustomUserListView
 )
 
 urlpatterns = [
@@ -30,4 +31,5 @@ urlpatterns = [
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('transactions/', TransactionListView.as_view(), name='transaction-list'),
     path('transactions/<int:pk>/', TransactionDetailView.as_view(), name='transaction-detail'),
+    path('users/', CustomUserListView.as_view(), name='custom-user-list')
 ]
