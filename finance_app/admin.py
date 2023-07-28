@@ -24,3 +24,4 @@ class CustomUserAdmin(admin.ModelAdmin):
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
