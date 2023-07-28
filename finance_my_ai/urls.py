@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from finance_app.views import (
     AccountListView, AccountDetailView,
     CategoryListView, CategoryDetailView,
@@ -31,5 +32,7 @@ urlpatterns = [
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('transactions/', TransactionListView.as_view(), name='transaction-list'),
     path('transactions/<int:pk>/', TransactionDetailView.as_view(), name='transaction-detail'),
-    path('users/', CustomUserListView.as_view(), name='custom-user-list')
+    path('users/', CustomUserListView.as_view(), name='custom-user-list'),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

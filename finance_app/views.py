@@ -4,6 +4,7 @@ from finance_app.serializers import AccountSerializer, CategorySerializer, Trans
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
 from django.db.models import Sum
 
@@ -11,6 +12,8 @@ from django.db.models import Sum
 from django.db.models import Exists, OuterRef
 
 class AccountListView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
         transactions_min_amount = request.GET.get('transactions_min_amount')
 
@@ -32,6 +35,7 @@ class AccountListView(APIView):
 
 
 class AccountDetailView(APIView):
+    permission_classes = (IsAuthenticated,)
 
     @staticmethod
     def get(request, pk):
@@ -56,6 +60,8 @@ class AccountDetailView(APIView):
 
 
 class CategoryListView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
@@ -90,6 +96,8 @@ class CategoryDetailView(APIView):
 
 
 class TransactionListView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
 
         amount_min = request.GET.get('amount_min')
@@ -148,6 +156,8 @@ class TransactionDetailView(APIView):
 
 
 class CustomUserListView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
         users = CustomUser.objects.all()
         serializer = CustomUserSerializer(users, many=True)
