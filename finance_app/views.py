@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
-from finance_app.models import Account, Category, Transaction, CustomUser
-from finance_app.serializers import AccountSerializer, CategorySerializer, TransactionSerializer, CustomUserSerializer
+from finance_app.models import Category, Transaction
+from finance_app.serializers import CategorySerializer, TransactionSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -11,52 +11,7 @@ from django.db.models import Sum
 
 from django.db.models import Exists, OuterRef
 
-class AccountListView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        transactions_min_amount = request.GET.get('transactions_min_amount')
-
-        if transactions_min_amount is not None:
-            accounts = Account.objects.filter(user=request.user, accounts_key__amount__gt=float(transactions_min_amount)).distinct()
-        else:
-            accounts = Account.objects.filter(user=request.user)
-
-        serializer = AccountSerializer(accounts, many=True)
-        return Response(serializer.data)
-
-
-    def post(self, request):
-        serializer = AccountSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AccountDetailView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    @staticmethod
-    def get(request, pk):
-        account = get_object_or_404(Account, pk=pk)
-        serializer = AccountSerializer(account)
-        return Response(serializer.data)
-
-    @staticmethod
-    def put(self, request, pk):
-        account = get_object_or_404(Account, pk=pk)
-        serializer = AccountSerializer(account, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @staticmethod
-    def delete(self, request, pk):
-        account = get_object_or_404(Account, pk=pk)
-        account.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+from users.models import Account
 
 
 class CategoryListView(APIView):
@@ -123,8 +78,8 @@ class TransactionListView(APIView):
     def post(self, request):
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
-            account_id = request.data.get('account_id')
-            category_id = request.data.get('category_id')
+            account_id = request.data.get('account')
+            category_id = request.data.get('category')
 
             account = Account.objects.get(pk=account_id)
             category = Category.objects.get(pk=category_id)
@@ -153,19 +108,3 @@ class TransactionDetailView(APIView):
         transaction = get_object_or_404(Transaction, pk=pk)
         transaction.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CustomUserListView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        users = CustomUser.objects.all()
-        serializer = CustomUserSerializer(users, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

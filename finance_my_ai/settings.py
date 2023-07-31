@@ -27,12 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'finance_app.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Application definition
 
 INSTALLED_APPS = [
     'finance_app',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
