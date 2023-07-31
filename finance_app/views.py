@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from finance_app.models import Category, Transaction
-from finance_app.serializers import CategorySerializer, TransactionSerializer
+from finance_app.serializers import CategorySerializer, TransactionSerializer, TransactionOutputSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -71,7 +71,7 @@ class TransactionListView(APIView):
         if date_max is not None:
             transactions = transactions.filter(date__lte=date_max)
 
-        serializer = TransactionSerializer(transactions, many=True)
+        serializer = TransactionOutputSerializer(transactions, many=True)
 
         return Response(serializer.data)
 

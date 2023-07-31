@@ -20,9 +20,13 @@ from finance_app.views import (
     CategoryListView, CategoryDetailView,
     TransactionListView, TransactionDetailView
 )
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('finance_app/', include('finance_app.urls')),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
