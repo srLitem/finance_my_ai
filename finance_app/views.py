@@ -5,8 +5,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Q
-from django.db.models import Sum
 
 
 from django.db.models import Exists, OuterRef
@@ -79,12 +77,13 @@ class TransactionListView(APIView):
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             account_id = request.data.get('account')
-            category_id = request.data.get('category')
+            categories_id = request.data.get('categories')
 
             account = Account.objects.get(pk=account_id)
-            category = Category.objects.get(pk=category_id)
+            # Filter allows me to return more than one value
+            categories = Category.objects.filter(pk__in=categories_id)
 
-            serializer.save(account=account, category=category)
+            serializer.save(account=account, categories=categories)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

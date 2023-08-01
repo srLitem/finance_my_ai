@@ -9,10 +9,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+    categories = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True)
 
     class Meta:
         model = Transaction
-        fields = ['id', 'account', 'amount', 'date', 'description']
+        fields = ['id', 'account', 'categories', 'amount', 'date', 'description']
 
     def validate_amount(self, value):
         if value < 0:
@@ -27,7 +28,7 @@ class TransactionOutputSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ['id', 'account', 'amount', 'date_formatted', 'description']
+        fields = ['id', 'account', 'categories', 'amount', 'date_formatted', 'description']
 
     def get_date_formatted(self, obj):
         return obj.date.strftime("%d-%m-%Y %H:%M")

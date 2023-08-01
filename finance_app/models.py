@@ -3,7 +3,6 @@ import datetime
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -13,7 +12,7 @@ class Category(models.Model):
 
 class Transaction(models.Model):
     # Foreign keys
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories_key')
+    categories = models.ManyToManyField(Category, related_name='categories_key')
     account = models.ForeignKey('users.Account', on_delete=models.PROTECT, related_name='accounts_key')
     # Fields
     amount = models.FloatField()
