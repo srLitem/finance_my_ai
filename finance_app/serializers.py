@@ -14,6 +14,13 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = ['id', 'account', 'amount', 'date', 'description']
 
+    def validate_amount(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Amount cannot be negative")
+        elif value > 10000:
+            raise serializers.ValidationError("Amount cannot be greater than 10,000")
+        return value
+
 
 class TransactionOutputSerializer(serializers.ModelSerializer):
     date_formatted = serializers.SerializerMethodField()
